@@ -1,22 +1,20 @@
+// Load the nqm input module for receiving input from the process host.
+var input = require("nqm-process-utils").input;
+
 // Load the nqm output module for communicating progress and info back to the process host.
 var output = require("nqm-process-utils").output;
 
-// INFO output serves no function other than diagnostic 
+// debug output serves no function other than diagnostic 
 output.debug("starting");
 
-process.stdin.setEncoding('utf8');
-
-var inputData = "";
-process.stdin.on('data', function (chunk) {
-  output.debug("input chunk: " + chunk);
-  inputData += chunk;
-});
-
-process.stdin.on('end', function () {
-  output.debug("got inputs: " + inputData);
-  
-  var inputObj = JSON.parse(inputData);
-  output.result( inputObj.taskId);
+// Read any data passed from the process host. Specify we're expecting JSON data.
+input.read("json", function(err, inputObj) {
+  if (err) {
+    output.error("failed to read input: %s", err.message);
+    // Exit code non-zero => error
+    process.exit(1);
+  }
+  output.debug("got input: %j", inputObj);
 
   // PROGRESS output is mandatory, to inform the host of progress.
   output.progress(0);
@@ -31,14 +29,12 @@ process.stdin.on('end', function () {
     output.progress(counter);
 
     if (counter === 100) {
-      output.error("tock");
-      output.debug("complete");
+      output.error("ERROR %s", "- sample error");
+      output.debug("DEBUG - sample debug");
+      output.result(inputObj.taskId);
 
       // Exit code 0 => finished with no errors.
       process.exit(0);
     }
   }, 2500);  
 });
-
-output.debug("reading input");
-process.stdin.resume();
