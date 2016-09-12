@@ -1,20 +1,20 @@
 // Load the nqm input module for receiving input from the process host.
-var input = require("nqm-process-utils").input;
+var input = require("nqm-databot-utils").input;
 
 // Load the nqm output module for communicating progress and info back to the process host.
-var output = require("nqm-process-utils").output;
+var output = require("nqm-databot-utils").output;
 
-// debug output serves no function other than diagnostic 
+// debug output is sent to the TDX when the databot completes. 
 output.debug("starting");
 
 // Read any data passed from the process host. Specify we're expecting JSON data.
-input.read("json", function(err, inputObj) {
+input.read("json", function(err, inputArgs) {
   if (err) {
+    // Errors are transmitted to the TDX.
     output.error("failed to read input: %s", err.message);
-    // Exit code non-zero => error
+    // Exit code non-zero => tells the TDX this databot failed.
     process.exit(1);
   }
-  output.debug("got input: %j", inputObj);
 
   // PROGRESS output is mandatory, to inform the host of progress.
   output.progress(0);
@@ -29,9 +29,8 @@ input.read("json", function(err, inputObj) {
     output.progress(counter);
 
     if (counter === 100) {
-      output.error("ERROR %s", "- sample error");
-      output.debug("DEBUG - sample debug");
-      output.result(inputObj.taskId);
+      // Result output is sent to the TDX when the databot completes.
+      output.result({answer: 42});
 
       // Exit code 0 => finished with no errors.
       process.exit(0);

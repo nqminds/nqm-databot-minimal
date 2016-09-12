@@ -1,2 +1,2 @@
-# nqm-process-minimal
-The simplest example of a javascript-based nqm process
+# nqm-databot-minimal
+The simplest example of a javascript-based nqm databot
