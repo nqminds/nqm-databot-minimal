@@ -1,0 +1,19 @@
+{
+  "name": "nqm-databot-minimal",
+  "version": "0.1.0",
+  "description": "The simplest example of a javascript-based nqm databot",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/nqminds/nqm-databot-minimal.git"
+  },
+  "author": "toby.ealden@gmail.com",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/nqminds/nqm-databot-minimal/issues"
+  },
+  "homepage": "https://github.com/nqminds/nqm-databot-minimal#readme"
+}
